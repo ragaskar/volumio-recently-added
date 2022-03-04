@@ -1,0 +1,13 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    mpd_client (0.1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  mpd_client
+
+BUNDLED WITH
+   2.1.4
