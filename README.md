@@ -5,7 +5,7 @@ Ruby script to create "Recently Added" playlists for Volumio. This will add a `R
 
 (abbreviated instructions). 
 
-1. You must use Volumio 3+ (older versions have an mpd that does not correctly support the `modified-since` search function
+1. You must use Volumio 3+ (older versions have an mpd that does not correctly support the `modified-since` search function)
 1. Turn on SSH for volumio
 1. Get ruby on your volumio instance (I prefer chruby). Tested with 2.7.5. Rubies >= 3 don't install well on volumio's linux (missing newer OpenSSL). 
 1. Add this script, `bundle` 
