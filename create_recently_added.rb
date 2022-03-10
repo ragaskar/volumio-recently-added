@@ -33,6 +33,7 @@ require 'date'
 require 'json'
 client = MPD::Client.new
 client.connect('localhost', '6600')
+client.update #this won't complete by the time we ask for recents, but why wait? the next cron job will get it.
 start_of_week = Date.today - Date.today.wday
 songs = client.recently_added(start_of_week)
 decorator = SongPlaylistDecorator.new
