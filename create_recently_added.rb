@@ -20,7 +20,7 @@ class SongPlaylistDecorator
 
     {
       service: 'mpd',
-      albumart: "/albumart?web=#{artist}/#{album}/extralarge&path=/mnt/#{URI.encode(file)}&icon=fa-tags&metadata=true",
+      albumart: "/albumart?web=#{artist}/#{album}/extralarge&path=/mnt/#{URI.encode_www_form_component(file)}&icon=fa-tags&metadata=true",
       title: title,
       artist: artist,
       album: album,
@@ -34,8 +34,12 @@ require 'json'
 client = MPD::Client.new
 client.connect('localhost', '6600')
 client.update #this won't complete by the time we ask for recents, but why wait? the next cron job will get it.
-start_of_week = Date.today - Date.today.wday
+start_of_week = DateTime.now.new_offset('-08:00').to_date - DateTime.now.new_offset('-08:00').to_date.wday
 songs = client.recently_added(start_of_week)
+puts "found songs for #{start_of_week}" if songs.length > 0
+songs.each do |song|
+  puts "#{song['file']} #{song['last-modified']}"
+end
 decorator = SongPlaylistDecorator.new
 playlist_formatted_songs = songs.map do |song|
   decorator.decorate(song)
