@@ -31,10 +31,27 @@ end
 
 require 'date'
 require 'json'
+require 'optparse'
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: volumio-recently-added.rb [options]"
+
+      opts.on("-d", "--debug", "Run verbosely") do |v|
+            options[:debug] = v
+      end
+end.parse!
+
+#we already print everything :) 
+#p options
+#p ARGV
+
 client = MPD::Client.new
 client.connect('localhost', '6600')
 client.update #this won't complete by the time we ask for recents, but why wait? the next cron job will get it.
-start_of_week = DateTime.now.new_offset('-08:00').to_date - DateTime.now.new_offset('-08:00').to_date.wday
+#Timezones must match modified times on disk (e.g. if mtime is UTC, pass UTC, if not, you need to shift it and maybe convert to UTC :) ).
+#MPD always takes UTC, unclear if it's smart enough to deal with zone handling on mtimes. 
+start_of_week = DateTime.now.to_date - DateTime.now.to_date.wday
 songs = client.recently_added(start_of_week)
 puts "found songs for #{start_of_week}" if songs.length > 0
 songs.each do |song|
